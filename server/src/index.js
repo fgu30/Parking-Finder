@@ -12,24 +12,24 @@ require("dotenv").config();
 const app = express();
 
 mongoose.connect(process.env.DATABASE_URL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useNewUrlParser: true,
 });
 
 app.use(morgan("common"));
 app.use(helmet());
 app.use(
-    cors({
-        origin: process.env.CORS_ORIGIN,
-    })
+  cors({
+    origin: process.env.CORS_ORIGIN,
+  })
 );
 
 app.use(express.json()); // support json encoded bodies
 
 app.get("/", (req, res) => {
-    res.json({
-        status: "My API is alive!",
-    });
+  res.json({
+    status: "My API is alive!",
+  });
 });
 
 app.use("/api/logs", logs);
@@ -41,5 +41,5 @@ app.use(middlewares.errorHandler);
 const port = process.env.PORT || 2001;
 
 app.listen(port, () => {
-    console.log(`the server is listening at ${port}`);
+  console.log(`http://localhost:${port}`);
 });
