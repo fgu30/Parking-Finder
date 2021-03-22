@@ -45,6 +45,7 @@ export default function App() {
     longitude: -74.006,
     zoom: 12,
   });
+  const [selectedPoint, setSelectedPoint] = useState(null);
   const geocoderContainerRef = useRef();
   const mapRef = useRef();
   const url = "http://localhost:2001/api/logs";
@@ -96,9 +97,9 @@ export default function App() {
               color="inherit"
               aria-label="menu"
             >
-              <MenuIcon />
-              <div ref={geocoderContainerRef}></div>
+              <MenuIcon position="absolute" left="" />
             </IconButton>
+            <div ref={geocoderContainerRef}></div>
           </Toolbar>
         </AppBar>
         <Accordion>
@@ -107,7 +108,9 @@ export default function App() {
             aria-controls="panel1a-content"
             id="panel1a-header"
           >
-            <Typography className={classes.heading}>Accordion 1</Typography>
+            <Typography className={classes.heading}>
+              Parking Information
+            </Typography>
           </AccordionSummary>
           <AccordionDetails>
             <Typography>parking infor.</Typography>
@@ -150,7 +153,7 @@ export default function App() {
                       borderColor: "rgba(0,0,0,0.2)",
                       alignItems: "center",
                       justifyContent: "center",
-                      backgroundColor: "#fff",
+                      backgroundColor: "#1E90FF",
                       borderRadius: 100,
 
                       width: 30 + (pointCount / points.length) * 100,
@@ -175,7 +178,17 @@ export default function App() {
                       });
                     }}
                   >
-                    {pointCount}
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                        color: "#F8F8FF",
+                      }}
+                    >
+                      {pointCount}
+                    </div>
                   </div>
                 </div>
               </Marker>
@@ -187,9 +200,16 @@ export default function App() {
               latitude={latitude}
               longitude={longitude}
             >
-              <div style={{ width: 20, height: 20 }}>
-                <img src="images/parkingStop.svg" alt="nycmeter" />
-              </div>
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedPoint(cluster);
+                }}
+              >
+                <div style={{ width: 20, height: 20 }}>
+                  <img src="images/parkingStop.svg" alt="nycmeter" />
+                </div>
+              </button>
             </Marker>
           );
         })}
