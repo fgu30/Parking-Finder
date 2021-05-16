@@ -1,5 +1,5 @@
 import "mapbox-gl/dist/mapbox-gl.css";
-import ReactMapGl, { Marker, FlyToInterpolator } from "react-map-gl";
+import ReactMapGl, { Marker, FlyToInterpolator, Popup } from "react-map-gl";
 import React, { useState, useRef, useCallback } from "react";
 import useSwr from "swr";
 import useSupercluster from "use-supercluster";
@@ -10,7 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 //accodian
@@ -18,6 +18,12 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+// card
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
 
 const fetcher = (...args) => fetch(...args).then((Response) => Response.json());
 
@@ -41,8 +47,8 @@ export default function App() {
   const [viewport, setViewport] = useState({
     width: "100vw",
     height: "100vh",
-    latitude: 40.7128,
-    longitude: -74.006,
+    latitude: 40.739545,
+    longitude: -73.961673,
     zoom: 12,
   });
   const [selectedPoint, setSelectedPoint] = useState(null);
@@ -50,7 +56,7 @@ export default function App() {
   const mapRef = useRef();
   const url = "http://localhost:2001/api/logs";
   const { data, error } = useSwr(url, fetcher);
-  const nycmeters = data && !error ? data.slice(0, 1000) : [];
+  const nycmeters = data && !error ? data : [];
 
   const points = nycmeters.map((nycmeter) => ({
     ...nycmeter,
@@ -112,9 +118,42 @@ export default function App() {
               Parking Information
             </Typography>
           </AccordionSummary>
-          <AccordionDetails>
-            <Typography>parking infor.</Typography>
-          </AccordionDetails>
+          <div className={classes.column}></div>
+
+          {selectedPoint ? (
+            <AccordionDetails>
+              {/* <h1>{selectedPoint.properties.meter_type}</h1> */}
+              <Card className={classes.root}>
+                <CardActionArea>
+                  <CardMedia
+                    component="img"
+                    alt="Contemplative Reptile"
+                    height="140"
+                    image={
+                      selectedPoint.properties.borough === "Queens"
+                        ? "/images/queensprice.jpg"
+                        : "/images/manprice.jpg"
+                    }
+                    title="Contemplative Reptile"
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {selectedPoint.properties.borough} Parking
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      component="p"
+                    >
+                      {selectedPoint.properties.borough === "Queens"
+                        ? "$1 per hour"
+                        : "$3.5 per hour"}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </AccordionDetails>
+          ) : null}
         </Accordion>
       </div>
       <ReactMapGl
@@ -133,10 +172,8 @@ export default function App() {
           // every cluster point has coordinates
           const [longitude, latitude] = cluster.geometry.coordinates;
           // the point may be either a cluster or a crime point
-          const {
-            cluster: isCluster,
-            point_count: pointCount,
-          } = cluster.properties;
+          const { cluster: isCluster, point_count: pointCount } =
+            cluster.properties;
 
           // we have a cluster to render
           if (isCluster) {
@@ -213,6 +250,20 @@ export default function App() {
             </Marker>
           );
         })}
+        {/* {selectedPoint ? (
+          <Popup
+            latitude={selectedPoint.cluster.geometry.coordinates[1]}
+            longitude={selectedPoint.cluster.geometry.coordinates[0]}
+            onClose={() => {
+              selectedPoint(null);
+            }}
+          >
+            <div>
+              <h2>{selectedPoint.properties.NAME}</h2>
+              <p>{selectedPoint.properties.DESCRIPTIO}</p>
+            </div>
+          </Popup>
+        ) : null} */}
         <Geocoder
           mapRef={mapRef}
           containerRef={geocoderContainerRef}
