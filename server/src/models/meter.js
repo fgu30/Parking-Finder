@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const regulation = new Schema(
+const nycmeter = new Schema(
   {
     type: String,
     properties: Object,
@@ -11,6 +11,6 @@ const regulation = new Schema(
   { collection: "meter" }
 );
 
-const LogEntry = mongoose.model("nycReg", regulation);
+const meters = mongoose.model("nycMeter", nycmeter);
 
-module.exports = LogEntry;
+module.exports = meters;

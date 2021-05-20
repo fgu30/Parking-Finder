@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-const nycmeter = new Schema(
+const regulation = new Schema(
   {
     type: String,
     properties: Object,
     geometry: Object,
   },
-  { collection: "meter" }
+  { collection: "regs" }
 );
 
-const Meter = mongoose.model("NycMeter", nycmeter);
+const regs = mongoose.model("nycRegs", regulation);
 
-module.exports = Meter;
+module.exports = regs;

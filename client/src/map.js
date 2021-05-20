@@ -21,7 +21,6 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 // card
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 
@@ -122,7 +121,6 @@ export default function App() {
 
           {selectedPoint ? (
             <AccordionDetails>
-              {/* <h1>{selectedPoint.properties.meter_type}</h1> */}
               <Card className={classes.root}>
                 <CardActionArea>
                   <CardMedia
@@ -250,20 +248,6 @@ export default function App() {
             </Marker>
           );
         })}
-        {/* {selectedPoint ? (
-          <Popup
-            latitude={selectedPoint.cluster.geometry.coordinates[1]}
-            longitude={selectedPoint.cluster.geometry.coordinates[0]}
-            onClose={() => {
-              selectedPoint(null);
-            }}
-          >
-            <div>
-              <h2>{selectedPoint.properties.NAME}</h2>
-              <p>{selectedPoint.properties.DESCRIPTIO}</p>
-            </div>
-          </Popup>
-        ) : null} */}
         <Geocoder
           mapRef={mapRef}
           containerRef={geocoderContainerRef}
